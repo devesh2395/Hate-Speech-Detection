@@ -74,13 +74,6 @@ python hate_speech_gui.py
 - **Classifier**: `DecisionTreeClassifier` from Scikit-learn
 - **Training/Test Split**: 67% train, 33% test
 
----
-
-## 📸 GUI Preview
-
-*(Insert a screenshot of the app here if available)*
-
----
 
 ## 📚 Notes
 
