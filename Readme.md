@@ -1,4 +1,4 @@
-# 🛡️ Hate Speech Detection GUI
+# 🛡️ Hate Speech Detection GUI(lets_see.py)
 
 A simple GUI-based application using Python and machine learning to classify tweets or text input into:
 - Hate Speech Detected
