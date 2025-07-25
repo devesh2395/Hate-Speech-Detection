@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Hate Speech Detection</title>
+</head>
+
+<body class="bg-gray-900 text-gray-400">
+  <header class="bg-gray-900 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+      <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0">
+        <img src="/static/meSmall.JPG" class="h-10 w-10 rounded-full" alt="Profile">
+        <span class="ml-3 text-xl">Hate Speech Detector</span>
+      </a>
+      <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
+        <a class="mr-5 hover:text-white" href="#" target="_blank">LinkedIn</a>
+        <a class="mr-5 hover:text-white" href="#" target="_blank">Twitter</a>
+        <a class="mr-5 hover:text-white" href="#" target="_blank">GitHub</a>
+        <a class="mr-5 hover:text-white" href="#" target="_blank">Instagram</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="text-gray-400 body-font relative">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="flex flex-col text-center w-full mb-12">
+        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white">Check Text for Hate Speech</h1>
+        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+          This app uses a Decision Tree Classifier trained on a Twitter dataset, with text preprocessing and feature extraction using CountVectorizer.
+        </p>
+      </div>
+      <div class="lg:w-1/2 md:w-2/3 mx-auto">
+        <div class="flex flex-wrap -m-2">
+          <div class="p-2 w-full">
+            <label for="inputText" class="leading-7 text-sm text-gray-400">Enter Text</label>
+            <input type="text" id="inputText"
+              class="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:bg-gray-900 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+          </div>
+          <div class="p-2 w-full">
+            <label for="result" class="leading-7 text-sm text-gray-400">Results</label>
+            <textarea id="result" readonly
+              class="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:bg-gray-900 focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+          </div>
+          <div class="p-2 w-full">
+            <button onclick="checkText()"
+              class="w-full cursor-pointer bg-gradient-to-b from-indigo-500 to-indigo-600 shadow-[0px_4px_32px_0_rgba(99,102,241,.70)] px-6 py-3 rounded-xl border-[1px] border-slate-500 text-white font-medium group">
+              <div class="relative overflow-hidden">
+                <p class="group-hover:-translate-y-7 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)]">Check</p>
+                <p
+                  class="absolute top-7 left-0 group-hover:top-0 duration-[1.125s] ease-[cubic-bezier(0.19,1,0.22,1)]">Check</p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    async function checkText() {
+      const input = document.getElementById("inputText").value.trim();
+      const resultField = document.getElementById("result");
+
+      if (!input) {
+        resultField.value = "Please enter some text to analyze.";
+        return;
+      }
+
+      try {
+        const response = await fetch("/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: input })
+        });
+
+        if (!response.ok) throw new Error("Server error");
+
+        const data = await response.json();
+        resultField.value = data.result || "No result returned.";
+      } catch (error) {
+        console.error("Error:", error);
+        resultField.value = "An error occurred while processing your request.";
+      }
+    }
+  </script>
+</body>
+
+</html>
